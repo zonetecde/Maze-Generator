@@ -21,3 +21,4 @@ Le labyrinthe final généré :
 Un labyrinthe 100x100 (généré en 2 secondes) :
 
 ![image](https://user-images.githubusercontent.com/56195432/189483083-e98a127d-8c93-48b2-9cbb-69b15c18d8dd.png)
+![Labyrinthe 10 09 2022 14 38 51](https://user-images.githubusercontent.com/56195432/189483754-398b7bf8-b331-4451-9f5d-8d65202f5fd5.png)

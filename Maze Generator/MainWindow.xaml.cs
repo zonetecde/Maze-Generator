@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Newtonsoft.Json;
 
 namespace Maze_Generator
 {
@@ -24,7 +25,7 @@ namespace Maze_Generator
             set;
         }
 
-        public double borderThickness = 1;
+        public double borderThickness = 2.5;
         public int BoardSize = 6;
         public int NumbersOfCells = 0;
 
@@ -77,7 +78,7 @@ namespace Maze_Generator
                     {
                         Width = cellSize,
                         Height = cellSize,
-                        BorderThickness = new Thickness(1, 1.5, 1, 1),
+                        BorderThickness = new Thickness(1, 1, 1, 1),
                         BorderBrush = Brushes.Black,
                         Background = background,
                         CornerRadius = new CornerRadius(0),
@@ -144,6 +145,25 @@ namespace Maze_Generator
 
             Timer = new Timer(40);
             Timer.Elapsed += new ElapsedEventHandler(NextAlgoStep);
+
+            // ouvrir un maze générer en json
+
+            //List<Cell[,]> cells = JsonConvert.DeserializeObject<List<Cell[,]>>(File.ReadAllText(@"C:\Users\zonedetec\Desktop\Divers\gen_1_17 54 20.json"));
+            //for (int i = 0; i < cells[0].GetLength(0); i++)
+            //{
+            //    for (int v = 0;v < cells[0].GetLength(0); v++)
+            //    {
+            //        GameBoard[i, v].BorderThickness = new Thickness(
+            //            cells[0][i, v].Borders[0] == 0 ? 0 : 2,
+            //            cells[0][i, v].Borders[1] == 0 ? 0 : 2,
+            //            cells[0][i, v].Borders[2] == 0 ? 0 : 2,
+            //            cells[0][i, v].Borders[3] == 0 ? 0 : 2
+
+            //            );
+
+            //        GameBoard[i, v].Background = Brushes.Wheat;
+            //    }
+            //}
         }
 
         private bool IsInRandomWalk = true;  // si on doit choisir une nouvelle random case ou si c'est une rnadom walk
@@ -153,6 +173,7 @@ namespace Maze_Generator
         // Y:X
 
         private int lastdir = -1;
+        private bool stopInstantMode = false;
 
         private void NextAlgoStep(object? sender, ElapsedEventArgs e)
         {
@@ -162,12 +183,15 @@ namespace Maze_Generator
                 {
                     Timer.Stop();
 
+                    stopInstantMode = false;
                     checkBox_instant.IsChecked = false;
-                    while (NumbersOfCells != BoardSize * BoardSize)
+
+                    while(!stopInstantMode)
                         NextAlgoStep(this, null);
 
                     checkBox_instant.IsChecked = true;
                     button_save.IsEnabled = true;
+                    button_saveJ.IsEnabled = true;
                 }
                 else
                 
@@ -187,6 +211,7 @@ namespace Maze_Generator
                         }
                         else
                         {
+                            stopInstantMode = true;
                             rdnX = -1;
                             rdnY = -1;
 
@@ -194,6 +219,7 @@ namespace Maze_Generator
                             button_pause.IsEnabled = false;
                             txtBox_boardSize.IsEnabled = false;
                             button_save.IsEnabled = true;
+                            button_saveJ.IsEnabled = true;
                             Timer.Stop();
                             break;
                         }
@@ -223,10 +249,10 @@ namespace Maze_Generator
 
                     bool isPossible = false;
                     int[] lastPos = RandomWalkPos.Last();
-
+                    int direction;
                     do
                     {
-                        int direction = Rdn.Next(4);
+                        direction = Rdn.Next(4);
                         if (lastdir != direction || checkBox_moreRandom.IsChecked == false)
                         {
                             // check si le est move possible
@@ -293,11 +319,10 @@ namespace Maze_Generator
                         GameBoard[CurrentPathPos[0], CurrentPathPos[1]].Tag = "1";
                         GameBoard[CurrentPathPos[0], CurrentPathPos[1]].Background = Brushes.White;
                         GameBoard[CurrentPathPos[0], CurrentPathPos[1]].BorderThickness = new Thickness(borderThickness);
-                        NumbersOfCells++;
+
+                        NumbersOfCells++; 
                     }
-                    else  // effet visuel
-                    {
-                    }
+
                 }
                 else
                 {
@@ -420,10 +445,13 @@ namespace Maze_Generator
                     if (lastTag == "1")
                     {
                         IsInRandomWalk = true;
+
                     }
                     else
                         NumbersOfCells++;
                 }
+
+
             });
         }
 
@@ -435,6 +463,8 @@ namespace Maze_Generator
                 button_pause.IsEnabled = true;
                 txtBox_boardSize.IsEnabled = false;
                 button_save.IsEnabled = false;
+                button_saveJ.IsEnabled = false;
+                button_openJ.IsEnabled = false;
 
 
                 // start l'algo
@@ -456,10 +486,10 @@ namespace Maze_Generator
 
                 if (checkBox_instant.IsChecked == true)
                 {
-                    while (NumbersOfCells != BoardSize * BoardSize)
-                        NextAlgoStep(this, null);
+                    NextAlgoStep(this, null);
 
                     button_save.IsEnabled = true;
+                    button_saveJ.IsEnabled = true;
                 }
             }
             else
@@ -471,7 +501,10 @@ namespace Maze_Generator
                 button_next.IsEnabled = false;
                 button_pause.IsEnabled = false;
                 button_save.IsEnabled = false;
+                button_saveJ.IsEnabled = false;
                 txtBox_boardSize.IsEnabled = true;
+                button_openJ.IsEnabled = true;
+
                 wrapPanel_gameBoard.Children.Clear();
                 DrawGameBoard();
             }
@@ -578,6 +611,128 @@ namespace Maze_Generator
                         GameBoard[x, y].BorderThickness = new Thickness(GameBoard[x, y].BorderThickness.Left, GameBoard[x, y].BorderThickness.Top, GameBoard[x, y].BorderThickness.Right, borderThickness);
                 }
             }
+        }
+
+        private void Button_Click_Gen(object sender, RoutedEventArgs e)
+        {
+            Window_MassGen window_MassGen = new Window_MassGen();
+            window_MassGen.Show();  
+        }
+
+        private void button_save_Json_Click(object sender, RoutedEventArgs e)
+        {
+            List<Cell[,]> cells = new List<Cell[,]>();
+            cells.Add(new Cell[BoardSize, BoardSize]);
+            for (int x = 0; x < BoardSize; x++)
+            {
+                for (int y = 0; y < BoardSize; y++)
+                {
+                    cells[0][x, y] = new Cell();
+                    cells[0][x, y].Borders = new int[4]
+                    {
+                        GameBoard[x,y].BorderThickness.Left == 0 ? 0 : 1,
+                        GameBoard[x,y].BorderThickness.Top == 0 ? 0 : 1,
+                        GameBoard[x,y].BorderThickness.Right == 0 ? 0 : 1,
+                        GameBoard[x,y].BorderThickness.Bottom == 0 ? 0 : 1,
+                    };
+                }
+            }
+
+            var dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            CommonFileDialogResult result = dialog.ShowDialog();
+
+            if (result == CommonFileDialogResult.Ok)
+            {
+                File.WriteAllText(dialog.FileName + @"\maze " + DateTime.Now.ToString("dd MM yyyy HH mm ss") + ".json", JsonConvert.SerializeObject(cells));
+            }
+        }
+
+        private int actualMazeIndex = 0;
+        List<Cell[,]> mazes;
+
+        private void button_openJ_click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new CommonOpenFileDialog();
+            dialog.Filters.Add(new CommonFileDialogFilter("Json file", "json"));
+
+            CommonFileDialogResult result = dialog.ShowDialog();
+
+            if (result == CommonFileDialogResult.Ok)
+            {
+                string json = File.ReadAllText(dialog.FileName);
+                try
+                {
+                    mazes = JsonConvert.DeserializeObject<List<Cell[,]>>(json);
+
+                    // ouvre les labys
+                    BoardSize = mazes[0].GetLength(0);
+                    txtBox_boardSize.Text=  mazes[0].GetLength(0).ToString();
+                    wrapPanel_gameBoard.Children.Clear();
+                    DrawGameBoard();
+
+                    button_previousMaze.IsEnabled = false;
+                    if(mazes.Count > 1)
+                        button_nextMaze.IsEnabled = true;
+                    else
+                        button_nextMaze.IsEnabled = false;
+
+
+                    button_start.Content = "Reset";
+                    button_pause.IsEnabled = false;
+                    button_save.IsEnabled = true;
+                    button_saveJ.IsEnabled = true;
+                    button_next.IsEnabled = false;
+                    actualMazeIndex = 0;
+
+                    ShowActualMaze();
+                }
+                catch
+                {
+                    MessageBox.Show("Fichier Json invalide");
+                }
+            }
+        }
+
+        private void ShowActualMaze()
+        {
+            for (int x = 0; x < mazes[actualMazeIndex].GetLength(0); x++)
+            {
+                for (int y = 0; y < mazes[actualMazeIndex].GetLength(1); y++)
+                {
+                    GameBoard[x, y].Background = Brushes.White;
+                    GameBoard[x, y].BorderThickness = new Thickness(
+
+                        mazes[actualMazeIndex][x,y].Borders[0] == 0 ? 0 : borderThickness,
+                        mazes[actualMazeIndex][x, y].Borders[1] == 0 ? 0 : borderThickness,
+                        mazes[actualMazeIndex][x, y].Borders[2] == 0 ? 0 : borderThickness,
+                        mazes[actualMazeIndex][x, y].Borders[3] == 0 ? 0 : borderThickness
+
+                        );
+                }
+            }
+        }
+
+        private void button_nextMaze_Click(object sender, RoutedEventArgs e)
+        {
+            actualMazeIndex++;
+            ShowActualMaze();
+            if (actualMazeIndex == mazes.Count - 1)
+                button_nextMaze.IsEnabled = false;
+
+            button_previousMaze.IsEnabled = true;
+
+        }
+
+        private void button_previousMaze_Click(object sender, RoutedEventArgs e)
+        {
+            actualMazeIndex--;
+            ShowActualMaze();
+            if (actualMazeIndex == 0)
+                button_previousMaze.IsEnabled = false;
+
+            button_nextMaze.IsEnabled = true;
+
         }
     }
 }

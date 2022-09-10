@@ -1,0 +1,24 @@
+﻿<Window x:Class="Maze_Generator.Window_MassGen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Maze_Generator"
+        mc:Ignorable="d"
+        Title="Générateur de masse" Topmost="False" FontFamily="Gill Sans MT" Height="431" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow" Icon="/icon.png">
+    <Grid>
+        <Label Content="Générateur de labyrinthe" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Top" FontSize="25" Margin="0,10,0,0"/>
+        <TextBox x:Name="txtBox_nbGen"  FontFamily="Consolas" FontSize="25" Text="100" PreviewTextInput="NumberValidationTextBox" Margin="190,84,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="184" />
+        <Label Content="Nombre de génération : " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3,84,0,0" FontSize="17"/>
+        <TextBox x:Name="txtBox_size"  FontFamily="Consolas" FontSize="25" Text="6" PreviewTextInput="NumberValidationTextBox" Margin="190,129,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="184" />
+        <Label Content="Taille du labyrinthe :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3,129,0,0" FontSize="17"/>
+        <Label Content="Emplacement du fichier :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3,175,0,0" FontSize="17"/>
+        <Button x:Name="button_path" Margin="190,175,0,0" Content="Ouvrir un dossier" Click="Button_Path_Click" Background="White" VerticalAlignment="Top" HorizontalAlignment="Left" Height="30" Width="184"/>
+
+        <ProgressBar x:Name="progressBar" Margin="10,263,10,10" Background="White"/>
+
+        <CheckBox x:Name="checkBox_moreRdn" Content="More random" FontSize="17" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,228,0,0"/>
+        <Label x:Name="button_generate" Margin="10,263,10,10" Content="Générer" FontSize="17" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MouseDown="button_generate_MouseDown" Cursor="Hand" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#00EAD9D9" />
+
+    </Grid>
+</Window>

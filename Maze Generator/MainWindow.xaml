@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Maze_Generator"
         mc:Ignorable="d"
-        Title="Maze Generator"   MinHeight="700" MinWidth="933" WindowStartupLocation="CenterScreen" WindowState="Maximized" FontFamily="Gill Sans MT" SizeToContent="Manual" SizeChanged="Window_SizeChanged" Loaded="Window_Loaded" >
+        Title="Maze Generator"   MinHeight="700" MinWidth="933" WindowStartupLocation="CenterScreen" WindowState="Maximized" FontFamily="Gill Sans MT" SizeToContent="Manual" SizeChanged="Window_SizeChanged" Loaded="Window_Loaded" Icon="/icon.png" >
     <Window.Background>
         <ImageBrush ImageSource="/background.jpg" Stretch="Fill"/>
     </Window.Background>

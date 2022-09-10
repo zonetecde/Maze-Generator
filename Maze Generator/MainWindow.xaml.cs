@@ -167,6 +167,7 @@ namespace Maze_Generator
                         NextAlgoStep(this, null);
 
                     checkBox_instant.IsChecked = true;
+                    button_save.IsEnabled = true;
                 }
                 else
                 
@@ -453,9 +454,13 @@ namespace Maze_Generator
 
                 button_start.Content = "Reset";
 
-                if(checkBox_instant.IsChecked == true)
-                    while(NumbersOfCells != BoardSize * BoardSize)
+                if (checkBox_instant.IsChecked == true)
+                {
+                    while (NumbersOfCells != BoardSize * BoardSize)
                         NextAlgoStep(this, null);
+
+                    button_save.IsEnabled = true;
+                }
             }
             else
             {

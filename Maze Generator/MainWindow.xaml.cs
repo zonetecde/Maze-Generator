@@ -198,6 +198,7 @@ namespace Maze_Generator
                 if (IsInRandomWalk)
                 {
                     RandomWalkPos.Clear();
+                    wrapPanel_gameBoard.Background = (Brush)HexToBrushesConverter.ConvertFromString("#777777");
 
                     // step 1. Pick a random case who is not a cell
                     int rdnX;
@@ -211,6 +212,7 @@ namespace Maze_Generator
                         }
                         else
                         {
+                            wrapPanel_gameBoard.Background = Brushes.White;
                             stopInstantMode = true;
                             rdnX = -1;
                             rdnY = -1;
@@ -225,6 +227,16 @@ namespace Maze_Generator
                         }
 
                     } while (GameBoard[rdnY, rdnX].Tag == "1");
+
+                    // supprime les anciens background flèche
+                    for (int x = 0; x < BoardSize; x++)
+                    {
+                        for (int y = 0; y < BoardSize; y++)
+                        {
+                            if (GameBoard[x,y].Tag == "0")
+                                GameBoard[x, y].Background = Brushes.Transparent;
+                        }
+                    }
 
                     if (rdnX != -1)
                     {
@@ -263,7 +275,7 @@ namespace Maze_Generator
                                     {
                                         RandomWalkPos.Add(new int[] { lastPos[0], lastPos[1] - 1 });
                                         GameBoard[lastPos[0], lastPos[1]].Uid = "0";
-                                        GameBoard[lastPos[0], lastPos[1]].Background = Brushes.Cyan;
+                                        GameBoard[lastPos[0], lastPos[1]].Background = border_left.Background;
 
                                         isPossible = true;
                                     }
@@ -274,7 +286,7 @@ namespace Maze_Generator
                                         RandomWalkPos.Add(new int[] { lastPos[0] - 1, lastPos[1] });
                                         GameBoard[lastPos[0], lastPos[1]].Uid = "1";
 
-                                        GameBoard[lastPos[0], lastPos[1]].Background = Brushes.Red;
+                                        GameBoard[lastPos[0], lastPos[1]].Background = border_top.Background;
 
                                         isPossible = true;
                                     }
@@ -285,7 +297,7 @@ namespace Maze_Generator
                                         RandomWalkPos.Add(new int[] { lastPos[0], lastPos[1] + 1 });
                                         GameBoard[lastPos[0], lastPos[1]].Uid = "2";
 
-                                        GameBoard[lastPos[0], lastPos[1]].Background = Brushes.Green;
+                                        GameBoard[lastPos[0], lastPos[1]].Background = border_right.Background;
 
                                         isPossible = true;
                                     }
@@ -296,7 +308,7 @@ namespace Maze_Generator
                                         RandomWalkPos.Add(new int[] { lastPos[0] + 1, lastPos[1] });
                                         GameBoard[lastPos[0], lastPos[1]].Uid = "3";
 
-                                        GameBoard[lastPos[0], lastPos[1]].Background = Brushes.Pink;
+                                        GameBoard[lastPos[0], lastPos[1]].Background = border_bottom.Background;
 
                                         isPossible = true;
                                     }

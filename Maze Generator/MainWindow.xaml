@@ -10,7 +10,25 @@
         <ImageBrush ImageSource="/background.jpg" Stretch="Fill"/>
     </Window.Background>
     <Grid>
-        <WrapPanel Width="610" Height="610" x:Name="wrapPanel_gameBoard" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" Margin="0,10,0,50"/>
+        <Border x:Name="border_bottom" Visibility="Collapsed" Width="0" Height="0">
+            <Border.Background>
+                <ImageBrush ImageSource="/bottom.png"/>
+            </Border.Background>
+        </Border>        <Border x:Name="border_top" Visibility="Collapsed" Width="0" Height="0">
+            <Border.Background>
+                <ImageBrush ImageSource="/top.png"/>
+            </Border.Background>
+        </Border>        <Border x:Name="border_right" Visibility="Collapsed" Width="0" Height="0">
+            <Border.Background>
+                <ImageBrush ImageSource="/right.png"/>
+            </Border.Background>
+        </Border>        <Border x:Name="border_left" Visibility="Collapsed" Width="0" Height="0">
+            <Border.Background>
+                <ImageBrush ImageSource="/left.png"/>
+            </Border.Background>
+        </Border>
+
+        <WrapPanel Width="610" Height="610" x:Name="wrapPanel_gameBoard" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FF777777" Margin="0,10,0,50"/>
         <Label Width="610" Height="610" x:Name="label_gameBoard_information" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#7F000000" Margin="0,10,0,50" Content="Appuyez sur entrée pour valider les changements" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="40" Visibility="Hidden" />
 
         <Grid Width="830" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,7" >

@@ -10,7 +10,11 @@
 
   <ItemGroup>
     <None Remove="background.jpg" />
+    <None Remove="bottom.png" />
     <None Remove="icon.png" />
+    <None Remove="left.png" />
+    <None Remove="right.png" />
+    <None Remove="top.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,7 +28,11 @@
 
   <ItemGroup>
     <Resource Include="background.jpg" />
+    <Resource Include="bottom.png" />
     <Resource Include="icon.png" />
+    <Resource Include="left.png" />
+    <Resource Include="right.png" />
+    <Resource Include="top.png" />
   </ItemGroup>
 
 </Project>

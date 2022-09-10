@@ -5,8 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Maze_Generator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Maze Generator"   MinHeight="700" MinWidth="933" WindowStartupLocation="CenterScreen" WindowState="Maximized" FontFamily="Gill Sans MT" SizeToContent="Manual" SizeChanged="Window_SizeChanged" Loaded="Window_Loaded" >
+    <Window.Background>
+        <ImageBrush ImageSource="/background.jpg" Stretch="Fill"/>
+    </Window.Background>
     <Grid>
+        <WrapPanel Width="610" Height="610" x:Name="wrapPanel_gameBoard" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" Margin="0,10,0,50"/>
+        <Label Width="610" Height="610" x:Name="label_gameBoard_information" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#7F000000" Margin="0,10,0,50" Content="Appuyez sur entrée pour valider les changements" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="40" Visibility="Hidden" />
 
+        <Grid Width="600" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,7" >
+            <TextBox x:Name="txtBox_boardSize" PreviewTextInput="NumberValidationTextBox" Width="50" FontSize="26" Text="6" FontFamily="Consolas" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxLength="3" KeyDown="TextBox_KeyDown" TextChanged="TextBox_TextChanged"/>
+            <Button x:Name="button_start" Content="Start" HorizontalAlignment="Center" Width="90" Margin="0,0,150,0" FontFamily="Consolas" FontSize="26" Click="Button_StartMazeGenerator_Click"/>
+            <Button x:Name="button_pause" Content="Play" HorizontalAlignment="Center" Width="90" Margin="150,0,0,0" FontFamily="Consolas" FontSize="26" Click="Button_pause_Click" IsEnabled="False"/>
+            <Button x:Name="button_next" Content="Next" HorizontalAlignment="Center" Width="90" Margin="340,0,0,0" FontFamily="Consolas" FontSize="26" Click="button_NextStep_click" IsEnabled="False"/>
+            <Button x:Name="button_save" Content="Save" HorizontalAlignment="Center" Width="80" Margin="520,0,0,0" FontFamily="Consolas" FontSize="26" IsEnabled="False" Click="button_save_Click"/>
+            <CheckBox x:Name="checkBox_moreRandom" Content="More Random" HorizontalAlignment="Left" Foreground="White" FontSize="20" Margin="0,-4,0,4"/>
+            <CheckBox x:Name="checkBox_instant" Content="Instant" HorizontalAlignment="Left" Foreground="White" FontSize="20" Margin="0,16,0,-16"/>
+        </Grid>
+
+        <Slider Orientation="Vertical" HorizontalAlignment="Right" Margin="0,20,20,20" Maximum="1000" Minimum="1" SmallChange="1" Value="40" ValueChanged="Slider_ValueChanged"/>
+        <Slider Orientation="Vertical" HorizontalAlignment="Left" Margin="20,20,20,20" Maximum="50" SmallChange="1" Value="5" ValueChanged="Slider_ValueChanged_1" Minimum="1"/>
     </Grid>
 </Window>

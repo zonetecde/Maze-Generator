@@ -46,11 +46,12 @@ namespace Maze_Generator
 
             bool IsInRandomWalk = true;
             bool IsInAddingPath = false;
+            bool stopInstantMode = false;
             List<int[]> RandomWalkPos = new List<int[]>();
             int[] CurrentPathPos = new int[2];
             int lastdir = -1;
 
-            while (NumbersOfCells != BoardSize * BoardSize)
+            while (!stopInstantMode)
             {
 
                 if (IsInRandomWalk)
@@ -61,9 +62,18 @@ namespace Maze_Generator
                     do
                     {
 
-                        rdnX = Rdn.Next(BoardSize);
-                        rdnY = Rdn.Next(BoardSize);
-
+                        if (NumbersOfCells != BoardSize * BoardSize)
+                        {
+                            rdnX = Rdn.Next(BoardSize);
+                            rdnY = Rdn.Next(BoardSize);
+                        }
+                        else
+                        {
+                            stopInstantMode = true;
+                            rdnX = -1;
+                            rdnY = -1;
+                            break;
+                        }
 
                     } while (GameBoard[rdnY, rdnX].Tag == "1");
 
@@ -78,6 +88,8 @@ namespace Maze_Generator
                         IsInRandomWalk = false;
                         IsInAddingPath = false;
                     }
+                    else
+                        stopInstantMode = true;
 
                 }
                 else if (!IsInAddingPath)

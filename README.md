@@ -12,11 +12,11 @@ Le checkbox "Instant" permet de skip l'aperçu de la génération (pour une gén
 
 Aperçu d'une génération en cours :
 
-![image](https://user-images.githubusercontent.com/56195432/189495402-946be300-042c-43e1-a7e6-7ee8ceda217e.png)
+![image](https://user-images.githubusercontent.com/56195432/189516468-006d33c1-c1c2-48ee-8d77-45b533b24a2d.png)
 
 Le labyrinthe final généré : 
 
-![image](https://user-images.githubusercontent.com/56195432/189495413-97987579-a9c2-476b-95da-e8b90fbc5776.png)
+![image](https://user-images.githubusercontent.com/56195432/189516471-79f7f068-6ec3-437f-9a80-a74678338f81.png)
 
 Un labyrinthe 100x100 (généré en 2 secondes) :
 

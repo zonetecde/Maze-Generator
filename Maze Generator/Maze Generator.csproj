@@ -27,12 +27,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="background.jpg" />
+    <Resource Include="res\background.jpg" />
     <Resource Include="icon.png" />
-    <Resource Include="_bottom.png" />
-    <Resource Include="_left.png" />
-    <Resource Include="_right.png" />
-    <Resource Include="_top.png" />
+    <Resource Include="res\_bottom.png" />
+    <Resource Include="res\_left.png" />
+    <Resource Include="res\_right.png" />
+    <Resource Include="res\_top.png" />
   </ItemGroup>
 
 </Project>

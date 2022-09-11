@@ -590,7 +590,7 @@ namespace Maze_Generator
 
             if (result == CommonFileDialogResult.Ok)
             {
-                GetJpgImage(uniformGrid_gameBoard, 15, 100, dialog.FileName + @"\Labyrinthe " + DateTime.Now.ToString("dd MM yyyy HH mm ss") + ".png");
+                GetJpgImage(uniformGrid_gameBoard, 2, 100, dialog.FileName + @"\Labyrinthe " + DateTime.Now.ToString("dd MM yyyy HH mm ss") + ".png");
 
             }
         }

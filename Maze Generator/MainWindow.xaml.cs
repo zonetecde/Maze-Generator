@@ -65,24 +65,24 @@ namespace Maze_Generator
             // Taille
             GameBoard = new Border[BoardSize, BoardSize];
 
+            Brush b = (Brush)HexToBrushesConverter.ConvertFromString("#777777");
+
             // Cases ajoutées
             for (int x = 0; x < BoardSize; x++)
             {
                 for (int y = 0; y < BoardSize; y++)
                 {
-                    double cellSize = wrapPanel_gameBoard.Width / (double)BoardSize - 0.01;
+                    double cellSize = wrapPanel_gameBoard.ActualHeight / (double)BoardSize - 0.01;
 
                     // #777777
-                    Brush background = (Brush)HexToBrushesConverter.ConvertFromString("#777777");
                     GameBoard[x, y] = new Border()
                     {
                         Width = cellSize,
                         Height = cellSize,
-                        BorderThickness = new Thickness(1, 1, 1, 1),
+                        BorderThickness = new Thickness(borderThickness),
                         BorderBrush = Brushes.Black,
-                        Background = background,
-                        CornerRadius = new CornerRadius(0),
-                        Tag = 0  // 0 = not a cell, 1 = cell
+                        Background = b,
+                        Tag = "0"  // 0 = not a cell, 1 = cell
                     };
 
                     wrapPanel_gameBoard.Children.Add(GameBoard[x, y]);
@@ -233,7 +233,7 @@ namespace Maze_Generator
                     {
                         for (int y = 0; y < BoardSize; y++)
                         {
-                            if (GameBoard[x,y].Tag == "0")
+                            if (GameBoard[x,y].Tag.ToString() == "0")
                                 GameBoard[x, y].Background = Brushes.Transparent;
                         }
                     }
@@ -317,6 +317,8 @@ namespace Maze_Generator
                         }
 
                     } while (!isPossible);
+
+                    GameBoard[RandomWalkPos.Last()[0], RandomWalkPos.Last()[1]].Background = Brushes.LightCoral;
 
                     // est-ce que il a attéri sur une cell?
                     if (GameBoard[RandomWalkPos.Last()[0], RandomWalkPos.Last()[1]].Tag == "1")
@@ -498,7 +500,14 @@ namespace Maze_Generator
 
                 if (checkBox_instant.IsChecked == true)
                 {
-                    NextAlgoStep(this, null);
+                    wrapPanel_gameBoard.Background = Brushes.White;
+                    // gen en utilisant le Generator car plus rapide
+                    actualMazeIndex = 0;
+                    mazes = new List<Cell[,]>();
+                    var cells = Generator.Gen(BoardSize, checkBox_moreRandom.IsChecked);
+                    mazes.Add(cells);
+
+                    ShowActualMaze();
 
                     button_save.IsEnabled = true;
                     button_saveJ.IsEnabled = true;
@@ -678,6 +687,7 @@ namespace Maze_Generator
                     mazes = JsonConvert.DeserializeObject<List<Cell[,]>>(json);
 
                     // ouvre les labys
+                    wrapPanel_gameBoard.Background = Brushes.White;
                     BoardSize = mazes[0].GetLength(0);
                     txtBox_boardSize.Text=  mazes[0].GetLength(0).ToString();
                     wrapPanel_gameBoard.Children.Clear();

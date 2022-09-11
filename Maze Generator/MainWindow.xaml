@@ -46,7 +46,7 @@
             <Button x:Name="button_previousMaze" Content="&lt;" HorizontalAlignment="Left" Width="20" Margin="0,-2,0,2" FontFamily="Consolas" FontSize="26" IsEnabled="False" Click="button_previousMaze_Click"/>
         </Grid>
 
-        <Slider Orientation="Vertical" HorizontalAlignment="Right" Margin="0,20,20,20" Maximum="1000" Minimum="1" SmallChange="1" Value="40" ValueChanged="Slider_ValueChanged"/>
-        <Slider Orientation="Vertical" HorizontalAlignment="Left" Margin="20,20,20,20" Maximum="50" SmallChange="1" Value="25" ValueChanged="Slider_ValueChanged_1" Minimum="1"/>
+        <Slider Orientation="Vertical" HorizontalAlignment="Right" Margin="0,20,20,20" Maximum="1000" Minimum="1" SmallChange="1" Value="40" ValueChanged="Slider_ValueChanged" ToolTip="Vitesse de la génération visuelle"/>
+        <Slider Orientation="Vertical" HorizontalAlignment="Left" Margin="20,20,20,20" Maximum="50" SmallChange="1" Value="25" ValueChanged="Slider_ValueChanged_1" Minimum="1" ToolTip="Taille des murs"/>
     </Grid>
 </Window>

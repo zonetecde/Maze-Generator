@@ -4,7 +4,7 @@ Ce logiciel permet de générer des labyrinthes en suivant l'algorithme de Wilso
 
 Aperçu du logiciel :
 
-![image](https://user-images.githubusercontent.com/56195432/189495376-b27eeff2-39d8-49d1-b75a-dc26b30413b8.png)
+![image](https://user-images.githubusercontent.com/56195432/189527862-0971cde2-78bf-4f8e-bb13-1da99b1d61be.png)
 
 Le slider à gauche permet de régler la taille des bordures, celui de droite la vitesse de la génération 
 Le checkbox "More Random" permet d'éviter d'avoir deux fois deux suites la même direction,
@@ -12,21 +12,21 @@ Le checkbox "Instant" permet de skip l'aperçu de la génération (pour une gén
 
 Aperçu d'une génération en cours :
 
-![image](https://user-images.githubusercontent.com/56195432/189516468-006d33c1-c1c2-48ee-8d77-45b533b24a2d.png)
+![image](https://user-images.githubusercontent.com/56195432/189527870-d3d6a2e5-3365-49bf-a4a6-deedd81f6694.png)
 
 Le labyrinthe final généré : 
 
-![image](https://user-images.githubusercontent.com/56195432/189516471-79f7f068-6ec3-437f-9a80-a74678338f81.png)
+![image](https://user-images.githubusercontent.com/56195432/189527878-c34b09cb-0948-466b-8342-1036e94c9180.png)
 
 Un labyrinthe 100x100 (généré en 2 secondes) :
 
-![image](https://user-images.githubusercontent.com/56195432/189495417-a4cb4f7b-f6e7-4f35-86b6-1802e52e2333.png)
+![image](https://user-images.githubusercontent.com/56195432/189527905-42d789ff-d2a1-4fbc-bc8e-53f96aeb30e4.png)
 
-![Labyrinthe 10 09 2022 19 43 48](https://user-images.githubusercontent.com/56195432/189495436-806d79d5-487a-47e1-a726-dedcdeafc3eb.png)
+![Labyrinthe 11 09 2022 14 41 57](https://user-images.githubusercontent.com/56195432/189528131-053bf65f-1c27-40c9-99e5-9e6337237fe0.png)
 
 Génération de masse
 
-![image](https://user-images.githubusercontent.com/56195432/189495456-00fab476-3f8e-4644-9608-61907507c33c.png)
+![image](https://user-images.githubusercontent.com/56195432/189528062-9ed631f8-c6a7-487c-a7b0-fec116df2e1d.png)
 
 Example de sortie json
 

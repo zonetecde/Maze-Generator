@@ -6,42 +6,48 @@
         xmlns:local="clr-namespace:Maze_Generator"
         mc:Ignorable="d"
         Title="Maze Generator"   MinHeight="700" MinWidth="933" WindowStartupLocation="CenterScreen" WindowState="Maximized" FontFamily="Gill Sans MT" SizeToContent="Manual" SizeChanged="Window_SizeChanged" Loaded="Window_Loaded" Icon="/icon.png" >
-    <Window.Background>
-        <ImageBrush ImageSource="res/background.jpg" Stretch="Fill"/>
-    </Window.Background>
+
     <Grid>
+        <Grid.Background>
+            <RadialGradientBrush>
+                <GradientStop Color="#FF4E2626" Offset="0.701"/>
+                <GradientStop Color="#FF1B2312"/>
+                <GradientStop Color="#FF1C1E29" Offset="1"/>
+            </RadialGradientBrush>
+        </Grid.Background>
         <Border x:Name="border_bottom" Visibility="Collapsed" Width="0" Height="0">
             <Border.Background>
                 <ImageBrush ImageSource="res/_bottom.png"/>
             </Border.Background>
-        </Border>        <Border x:Name="border_top" Visibility="Collapsed" Width="0" Height="0">
+        </Border>
+        <Border x:Name="border_top" Visibility="Collapsed" Width="0" Height="0">
             <Border.Background>
                 <ImageBrush ImageSource="res/_top.png"/>
             </Border.Background>
-        </Border>        <Border x:Name="border_right" Visibility="Collapsed" Width="0" Height="0">
+        </Border>
+        <Border x:Name="border_right" Visibility="Collapsed" Width="0" Height="0">
             <Border.Background>
                 <ImageBrush ImageSource="res/_right.png"/>
             </Border.Background>
-        </Border>        <Border x:Name="border_left" Visibility="Collapsed" Width="0" Height="0">
+        </Border>
+        <Border x:Name="border_left" Visibility="Collapsed" Width="0" Height="0">
             <Border.Background>
                 <ImageBrush ImageSource="res/_left.png"/>
             </Border.Background>
         </Border>
 
-        <Grid>
-            <WrapPanel Width="610" Height="610" x:Name="wrapPanel_gameBoard" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" Margin="0,10,0,50"/>
-        </Grid>
-        <Label Width="610" Height="610" x:Name="label_gameBoard_information" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#7F000000" Margin="0,10,0,50" Content="Appuyez sur entrée pour valider les changements" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="40" Visibility="Hidden" />
+        <UniformGrid Width="610" Height="610" x:Name="uniformGrid_gameBoard" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" Margin="0,0,0,40"/>
+        <Label Width="610" Height="610" x:Name="label_gameBoard_information" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#7F000000" Margin="0,0,0,30" Content="Appuyez sur entrée pour valider les changements" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="40" Visibility="Hidden" />
 
         <Grid Width="830" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,7" >
-            <TextBox x:Name="txtBox_boardSize" PreviewTextInput="NumberValidationTextBox" Width="50" FontSize="26" Text="6" FontFamily="Consolas" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxLength="3" KeyDown="TextBox_KeyDown" TextChanged="TextBox_TextChanged" ToolTip="Grid Size"/>
+            <TextBox x:Name="txtBox_boardSize" PreviewTextInput="NumberValidationTextBox" Width="50" FontSize="26" Text="12" FontFamily="Consolas" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxLength="3" KeyDown="TextBox_KeyDown" TextChanged="TextBox_TextChanged" ToolTip="Grid Size"/>
             <Button x:Name="button_start" Content="Start" HorizontalAlignment="Left" Width="90" Margin="296,0,0,-1" FontFamily="Consolas" FontSize="26" Click="Button_StartMazeGenerator_Click" ToolTip="Start the gen"/>
             <Button Content="Gen" HorizontalAlignment="Left" Width="50" Margin="243,0,0,-1" FontFamily="Consolas" FontSize="26" Click="Button_Click_Gen" ToolTip="Gen de masse" />
             <Button x:Name="button_pause" Content="Play" HorizontalAlignment="Center" Width="90" Margin="150,0,0,0" FontFamily="Consolas" FontSize="26" Click="Button_pause_Click" IsEnabled="False" ToolTip="Pause/Play"/>
             <Button x:Name="button_next" Content="Next" HorizontalAlignment="Center" Width="90" Margin="340,0,0,0" FontFamily="Consolas" FontSize="26" Click="button_NextStep_click" IsEnabled="False" ToolTip="Next Step"/>
             <Button x:Name="button_save" Content="Save_P" HorizontalAlignment="Center" Width="80" Margin="520,0,0,0" FontFamily="Consolas" FontSize="26" IsEnabled="False" Click="button_save_Click" ToolTip="Save a picture of the maze"/>
-            <CheckBox x:Name="checkBox_moreRandom" Content="More Random" HorizontalAlignment="Left" Foreground="White" FontSize="20" Margin="99,-4,0,17" ToolTip="Empêche d'avoir 2 fois la même direction d'affilée"/>
-            <CheckBox x:Name="checkBox_instant" Content="Instant" HorizontalAlignment="Left" Foreground="White" FontSize="20" Margin="99,16,0,-16" ToolTip="skip la gen"/>
+            <CheckBox x:Name="checkBox_moreRandom" Content="More Random" HorizontalAlignment="Left" Foreground="White" FontSize="20" Margin="99,0,0,13" ToolTip="Empêche d'avoir 2 fois la même direction d'affilée"/>
+            <CheckBox x:Name="checkBox_instant" Content="Instant" HorizontalAlignment="Left" Foreground="White" FontSize="20" Margin="99,17,0,-17" ToolTip="skip la gen"/>
             <Button x:Name="button_saveJ" Content="Save_J" HorizontalAlignment="Left" Width="80" Margin="720,0,0,0" FontFamily="Consolas" FontSize="26" IsEnabled="False" Click="button_save_Json_Click" ToolTip="Save the maze in a Json File"/>
             <Button x:Name="button_openJ" Content="O_J" HorizontalAlignment="Left" Width="68" Margin="25,-2,0,2" FontFamily="Consolas" FontSize="26"  ToolTip="Ouvrir des mazes d'un json" Click="button_openJ_click"/>
             <Button x:Name="button_nextMaze" Content="&gt;" HorizontalAlignment="Left" Width="20" Margin="805,0,0,0" FontFamily="Consolas" FontSize="26"  IsEnabled="False" Click="button_nextMaze_Click"/>
@@ -50,5 +56,7 @@
 
         <Slider Orientation="Vertical" HorizontalAlignment="Right" Margin="0,20,20,20" Maximum="1000" Minimum="1" SmallChange="1" Value="40" ValueChanged="Slider_ValueChanged" ToolTip="Vitesse de la génération visuelle"/>
         <Slider   Thumb.DragCompleted="Slider_DragCompleted" x:Name="slider_thickness" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,20,20,20" Maximum="50" SmallChange="1" Value="25" Minimum="1" ToolTip="Taille des murs"/>
+
+
     </Grid>
 </Window>

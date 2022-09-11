@@ -75,6 +75,12 @@ namespace Maze_Generator
                         Dispatcher.Invoke(() =>
                         {
                             gameBoards.Add(Generator.Gen(boardSize, checkBox_moreRdn.IsChecked));
+
+                            if(checkBox_entreeSortie.IsChecked == true)
+                            {
+                                gameBoards[gameBoards.Count -1 ][1, 0].Borders[0] = 0;
+                                gameBoards[gameBoards.Count - 1][boardSize - 2, boardSize - 1].Borders[2] = 0;
+                            }
                         });
 
                         int p = Convert.ToInt32(((double)i / nbGen) * 100);

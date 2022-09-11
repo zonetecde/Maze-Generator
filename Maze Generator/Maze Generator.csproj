@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="res\background.jpg" />
     <Resource Include="icon.png" />
     <Resource Include="res\_bottom.png" />
     <Resource Include="res\_left.png" />

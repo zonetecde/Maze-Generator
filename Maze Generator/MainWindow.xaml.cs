@@ -27,7 +27,7 @@ namespace Maze_Generator
         }
 
         public double borderThickness = 2.5;
-        public int BoardSize = 6;
+        public int BoardSize = 12;
         public int NumbersOfCells = 0;
 
         Random Rdn = new Random();
@@ -39,51 +39,53 @@ namespace Maze_Generator
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // Change la taille du gameBoard, les cases ne sont pas ajouté au lancement
-            wrapPanel_gameBoard.Width = e.NewSize.Height - (double)90;
-            wrapPanel_gameBoard.Height = e.NewSize.Height - (double)90;
+            uniformGrid_gameBoard.Width = e.NewSize.Height - (double)90;
+            uniformGrid_gameBoard.Height = e.NewSize.Height - (double)90;
 
             label_gameBoard_information.Width = e.NewSize.Height - (double)90;
             label_gameBoard_information.Height = e.NewSize.Height - (double)90;
 
-            // Change la taille des cases du gameBoard
-            if (GameBoard != null)
-            {
-                for (int x = 0; x < BoardSize; x++)
-                {
-                    for (int y = 0; y < BoardSize; y++)
-                    {
-                        double cellSize = wrapPanel_gameBoard.Width / (double)BoardSize - 0.001;
-                        GameBoard[x, y].Width = cellSize;
-                        GameBoard[x, y].Height = cellSize;
-                    }
-                }
-            }
+            //// Change la taille des cases du gameBoard
+            //if (GameBoard != null)
+            //{
+            //    for (int x = 0; x < BoardSize; x++)
+            //    {
+            //        for (int y = 0; y < BoardSize; y++)
+            //        {
+            //            double cellSize = wrapPanel_gameBoard.Width / (double)BoardSize - 0.001;
+            //            GameBoard[x, y].Width = cellSize;
+            //            GameBoard[x, y].Height = cellSize;
+            //        }
+            //    }
+            //}
         }
 
         private void DrawGameBoard()
         {
             // Taille
             GameBoard = new Border[BoardSize, BoardSize];
+            uniformGrid_gameBoard.Columns = BoardSize;
+            uniformGrid_gameBoard.Rows = BoardSize;
 
             // Cases ajoutées
             for (int x = 0; x < BoardSize; x++)
             {
                 for (int y = 0; y < BoardSize; y++)
                 {
-                    double cellSize = wrapPanel_gameBoard.ActualHeight / (double)BoardSize -0.001;
+                    //double cellSize = wrapPanel_gameBoard.ActualHeight / (double)BoardSize -0.001;
 
                     // #777777
                     GameBoard[x, y] = new Border()
                     {
-                        Width = cellSize,
-                        Height = cellSize,
+                        //Width = cellSize,
+                        //Height = cellSize,
                         BorderThickness = new Thickness(borderThickness),
                         BorderBrush = Brushes.Black,
                         Background = Brushes.DimGray,
                         Tag = "0"  // 0 = not a cell, 1 = cell
                     };
 
-                    wrapPanel_gameBoard.Children.Add(GameBoard[x, y]);
+                    uniformGrid_gameBoard.Children.Add(GameBoard[x, y]);
                 }
             }
         }
@@ -99,12 +101,12 @@ namespace Maze_Generator
                 if (e.Key == Key.Enter)
                 {
                     int wantedSize = Convert.ToInt32(txtBoxText);
-                    if (wantedSize != BoardSize)
+                    if (wantedSize != BoardSize && wantedSize>0)
                     {
                         // Changement de la taille du gameBoard
                         BoardSize = wantedSize;
 
-                        wrapPanel_gameBoard.Children.Clear();
+                        uniformGrid_gameBoard.Children.Clear();
                         DrawGameBoard();
 
                         label_gameBoard_information.Visibility = Visibility.Hidden;
@@ -173,9 +175,16 @@ namespace Maze_Generator
         private int lastdir = -1;
         private bool stopInstantMode = false;
 
+        private bool skipVisual = false;
+
         private void NextAlgoStep(object? sender, ElapsedEventArgs e)
         {
             Dispatcher.Invoke(() => {
+
+                if (sender == null)
+                    sender = "0";
+                else
+                    sender = "1";
 
                 if (checkBox_instant.IsChecked == true)
                 {
@@ -184,9 +193,12 @@ namespace Maze_Generator
                     stopInstantMode = false;
                     checkBox_instant.IsChecked = false;
 
-                    while(!stopInstantMode)
-                        NextAlgoStep(this, null);
+                    skipVisual = true;
 
+                    while (!stopInstantMode)
+                        NextAlgoStep(true, null);
+
+                    skipVisual = false;
                     checkBox_instant.IsChecked = true;
                     button_save.IsEnabled = true;
                     button_saveJ.IsEnabled = true;
@@ -225,6 +237,7 @@ namespace Maze_Generator
                     } while (GameBoard[rdnY, rdnX].Tag == "1");
 
                     // supprime les anciens background flèche
+                    if(!skipVisual)
                     for (int x = 0; x < BoardSize; x++)
                     {
                         for (int y = 0; y < BoardSize; y++)
@@ -271,7 +284,9 @@ namespace Maze_Generator
                                     {
                                         RandomWalkPos.Add(new int[] { lastPos[0], lastPos[1] - 1 });
                                         GameBoard[lastPos[0], lastPos[1]].Uid = "0";
-                                        GameBoard[lastPos[0], lastPos[1]].Background = border_left.Background;
+
+                                        if (!skipVisual)
+                                            GameBoard[lastPos[0], lastPos[1]].Background = border_left.Background;
 
                                         isPossible = true;
                                     }
@@ -282,7 +297,8 @@ namespace Maze_Generator
                                         RandomWalkPos.Add(new int[] { lastPos[0] - 1, lastPos[1] });
                                         GameBoard[lastPos[0], lastPos[1]].Uid = "1";
 
-                                        GameBoard[lastPos[0], lastPos[1]].Background = border_top.Background;
+                                        if (!skipVisual)
+                                            GameBoard[lastPos[0], lastPos[1]].Background = border_top.Background;
 
                                         isPossible = true;
                                     }
@@ -293,7 +309,8 @@ namespace Maze_Generator
                                         RandomWalkPos.Add(new int[] { lastPos[0], lastPos[1] + 1 });
                                         GameBoard[lastPos[0], lastPos[1]].Uid = "2";
 
-                                        GameBoard[lastPos[0], lastPos[1]].Background = border_right.Background;
+                                        if (!skipVisual)
+                                            GameBoard[lastPos[0], lastPos[1]].Background = border_right.Background;
 
                                         isPossible = true;
                                     }
@@ -304,7 +321,8 @@ namespace Maze_Generator
                                         RandomWalkPos.Add(new int[] { lastPos[0] + 1, lastPos[1] });
                                         GameBoard[lastPos[0], lastPos[1]].Uid = "3";
 
-                                        GameBoard[lastPos[0], lastPos[1]].Background = border_bottom.Background;
+                                        if (!skipVisual)
+                                            GameBoard[lastPos[0], lastPos[1]].Background = border_bottom.Background;
 
                                         isPossible = true;
                                     }
@@ -504,6 +522,8 @@ namespace Maze_Generator
 
                     ShowActualMaze();
 
+                    button_next.IsEnabled = false;
+                    button_pause.IsEnabled = false;
                     button_save.IsEnabled = true;
                     button_saveJ.IsEnabled = true;
                 }
@@ -563,7 +583,6 @@ namespace Maze_Generator
 
         private void button_save_Click(object sender, RoutedEventArgs e)
         {
-            var image = CreateBitmapSourceFromVisual(wrapPanel_gameBoard.ActualWidth, wrapPanel_gameBoard.ActualHeight, wrapPanel_gameBoard, true);
 
             var dialog = new CommonOpenFileDialog();
             dialog.IsFolderPicker = true;
@@ -571,46 +590,42 @@ namespace Maze_Generator
 
             if (result == CommonFileDialogResult.Ok)
             {
-                using (var fileStream = new FileStream(dialog.FileName + @"\Labyrinthe " + DateTime.Now.ToString("dd MM yyyy HH mm ss") + ".png", FileMode.Create))
-                {
-                    BitmapEncoder encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(image));
-                    encoder.Save(fileStream);
-                }
+                GetJpgImage(uniformGrid_gameBoard, 15, 100, dialog.FileName + @"\Labyrinthe " + DateTime.Now.ToString("dd MM yyyy HH mm ss") + ".png");
+
             }
-
-
         }
 
-        internal static BitmapSource CreateBitmapSourceFromVisual(
-                Double width,
-                Double height,
-                Visual visualToRender,
-                Boolean undoTransformation)
+        public static void GetJpgImage(UIElement source, double scale, int quality, string path)
         {
-            if (visualToRender == null)
-            {
-                return null;
-            }
-            RenderTargetBitmap bmp = new RenderTargetBitmap((Int32)Math.Ceiling(width),
-                (Int32)Math.Ceiling(height), 96, 96, PixelFormats.Pbgra32);
+            double actualHeight = source.RenderSize.Height;
+            double actualWidth = source.RenderSize.Width;
 
-            if (undoTransformation)
+            double renderHeight = actualHeight * scale;
+            double renderWidth = actualWidth * scale;
+
+            RenderTargetBitmap renderTarget = new RenderTargetBitmap((int)renderWidth, (int)renderHeight, 96, 96, PixelFormats.Pbgra32);
+            VisualBrush sourceBrush = new VisualBrush(source);
+
+            DrawingVisual drawingVisual = new DrawingVisual();
+            DrawingContext drawingContext = drawingVisual.RenderOpen();
+
+            using (drawingContext)
             {
-                DrawingVisual dv = new DrawingVisual();
-                using (DrawingContext dc = dv.RenderOpen())
-                {
-                    VisualBrush vb = new VisualBrush(visualToRender);
-                    dc.DrawRectangle(vb, null, new Rect(new Point(), new Size(width, height)));
-                }
-                bmp.Render(dv);
+                drawingContext.PushTransform(new ScaleTransform(scale, scale));
+                drawingContext.DrawRectangle(sourceBrush, null, new Rect(new Point(0, 0), new Point(actualWidth, actualHeight)));
             }
-            else
+            renderTarget.Render(drawingVisual);
+
+            JpegBitmapEncoder jpgEncoder = new JpegBitmapEncoder();
+            jpgEncoder.QualityLevel = quality;
+            jpgEncoder.Frames.Add(BitmapFrame.Create(renderTarget));
+
+            using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
             {
-                bmp.Render(visualToRender);
+                jpgEncoder.Save(fs);
             }
-            return bmp;
         }
+
 
         private void Button_Click_Gen(object sender, RoutedEventArgs e)
         {
@@ -667,10 +682,11 @@ namespace Maze_Generator
                     // ouvre les labys
                     BoardSize = mazes[0].GetLength(0);
                     txtBox_boardSize.Text=  mazes[0].GetLength(0).ToString();
-                    wrapPanel_gameBoard.Children.Clear();
+                    uniformGrid_gameBoard.Children.Clear();
                     DrawGameBoard();
 
                     button_previousMaze.IsEnabled = false;
+
                     if(mazes.Count > 1)
                         button_nextMaze.IsEnabled = true;
                     else
@@ -749,14 +765,21 @@ namespace Maze_Generator
                 {
                     for (int y = 0; y < BoardSize; y++)
                     {
-                        if (GameBoard[x, y].BorderThickness.Left > 0)
-                            GameBoard[x, y].BorderThickness = new Thickness(borderThickness, GameBoard[x, y].BorderThickness.Top, GameBoard[x, y].BorderThickness.Right, GameBoard[x, y].BorderThickness.Bottom);
-                        if (GameBoard[x, y].BorderThickness.Top > 0)
-                            GameBoard[x, y].BorderThickness = new Thickness(GameBoard[x, y].BorderThickness.Left, borderThickness, GameBoard[x, y].BorderThickness.Right, GameBoard[x, y].BorderThickness.Bottom);
-                        if (GameBoard[x, y].BorderThickness.Right > 0)
-                            GameBoard[x, y].BorderThickness = new Thickness(GameBoard[x, y].BorderThickness.Left, GameBoard[x, y].BorderThickness.Top, borderThickness, GameBoard[x, y].BorderThickness.Bottom);
-                        if (GameBoard[x, y].BorderThickness.Bottom > 0)
-                            GameBoard[x, y].BorderThickness = new Thickness(GameBoard[x, y].BorderThickness.Left, GameBoard[x, y].BorderThickness.Top, GameBoard[x, y].BorderThickness.Right, borderThickness);
+                        if (GameBoard[x, y].Background == Brushes.White)
+                        {
+                            if (GameBoard[x, y].BorderThickness.Left > 0)
+                                GameBoard[x, y].BorderThickness = new Thickness(borderThickness, GameBoard[x, y].BorderThickness.Top, GameBoard[x, y].BorderThickness.Right, GameBoard[x, y].BorderThickness.Bottom);
+                            if (GameBoard[x, y].BorderThickness.Top > 0)
+                                GameBoard[x, y].BorderThickness = new Thickness(GameBoard[x, y].BorderThickness.Left, borderThickness, GameBoard[x, y].BorderThickness.Right, GameBoard[x, y].BorderThickness.Bottom);
+                            if (GameBoard[x, y].BorderThickness.Right > 0)
+                                GameBoard[x, y].BorderThickness = new Thickness(GameBoard[x, y].BorderThickness.Left, GameBoard[x, y].BorderThickness.Top, borderThickness, GameBoard[x, y].BorderThickness.Bottom);
+                            if (GameBoard[x, y].BorderThickness.Bottom > 0)
+                                GameBoard[x, y].BorderThickness = new Thickness(GameBoard[x, y].BorderThickness.Left, GameBoard[x, y].BorderThickness.Top, GameBoard[x, y].BorderThickness.Right, borderThickness);
+                        }
+                        else
+                        {
+                            GameBoard[x, y].BorderThickness = new Thickness(borderThickness);
+                        }
                     }
                 }
         }

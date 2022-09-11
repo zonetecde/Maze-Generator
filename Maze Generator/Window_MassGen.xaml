@@ -18,6 +18,7 @@
         <ProgressBar x:Name="progressBar" Margin="10,263,10,10" Background="White"/>
 
         <CheckBox x:Name="checkBox_moreRdn" Content="More random" FontSize="17" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,228,0,0"/>
+        <CheckBox x:Name="checkBox_entreeSortie" Content="Entrée &amp; sortie" FontSize="17" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="248,228,0,0"/>
         <Label x:Name="button_generate" Margin="10,263,10,10" Content="Générer" FontSize="17" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MouseDown="button_generate_MouseDown" Cursor="Hand" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#00EAD9D9" />
 
     </Grid>

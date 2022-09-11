@@ -273,6 +273,7 @@ namespace Maze_Generator
                     int direction;
                     do
                     {
+                        MORERANDOM:
                         direction = Rdn.Next(4);
                         if (lastdir != direction || checkBox_moreRandom.IsChecked == false)
                         {
@@ -282,6 +283,21 @@ namespace Maze_Generator
                                 case 0:
                                     if (lastPos[1] - 1 >= 0)
                                     {
+                                        if (checkBox_moreRandom.IsChecked == true && NumbersOfCells > 1)
+                                            if (GameBoard[lastPos[0], lastPos[1] - 1].Tag == "1")
+
+                                                //75% de chance de ne pas le faire si autre choix possible
+                                                try
+                                                {
+                                                    if (GameBoard[lastPos[0] - 1, lastPos[1]].Tag == "0"
+                                                    || GameBoard[lastPos[0], lastPos[1] + 1].Tag == "0"
+                                                    || GameBoard[lastPos[0] + 1, lastPos[1]].Tag == "0")
+
+                                                        if (Rdn.Next(100) < 75)
+                                                            goto MORERANDOM;
+                                                }
+                                                catch { }
+
                                         RandomWalkPos.Add(new int[] { lastPos[0], lastPos[1] - 1 });
                                         GameBoard[lastPos[0], lastPos[1]].Uid = "0";
 
@@ -294,6 +310,21 @@ namespace Maze_Generator
                                 case 1:
                                     if (lastPos[0] - 1 >= 0)
                                     {
+                                        if (checkBox_moreRandom.IsChecked == true && NumbersOfCells > 1)
+                                            if (GameBoard[lastPos[0] - 1, lastPos[1]].Tag == "1")
+
+                                                //75% de chance de ne pas le faire si autre choix possible
+                                                try
+                                                {
+                                                    if (GameBoard[lastPos[0] + 1, lastPos[1]].Tag == "0"
+                                                    || GameBoard[lastPos[0], lastPos[1] + 1].Tag == "0"
+                                                    || GameBoard[lastPos[0], lastPos[1] - 1].Tag == "0")
+
+                                                        if (Rdn.Next(100) < 75)
+                                                            goto MORERANDOM;
+                                                }
+                                                catch { }
+
                                         RandomWalkPos.Add(new int[] { lastPos[0] - 1, lastPos[1] });
                                         GameBoard[lastPos[0], lastPos[1]].Uid = "1";
 
@@ -306,6 +337,21 @@ namespace Maze_Generator
                                 case 2:
                                     if (lastPos[1] + 1 < BoardSize)
                                     {
+                                        if (checkBox_moreRandom.IsChecked == true && NumbersOfCells > 1)
+                                            if (GameBoard[lastPos[0], lastPos[1] + 1].Tag == "1")
+
+                                                //75% de chance de ne pas le faire si autre choix possible
+                                                try
+                                                {
+                                                    if (GameBoard[lastPos[0] - 1, lastPos[1]].Tag == "0"
+                                                    || GameBoard[lastPos[0] + 1, lastPos[1] ].Tag == "0"
+                                                    || GameBoard[lastPos[0], lastPos[1] - 1].Tag == "0")
+
+                                                        if (Rdn.Next(100) < 75)
+                                                            goto MORERANDOM;
+                                                }
+                                                catch { }
+
                                         RandomWalkPos.Add(new int[] { lastPos[0], lastPos[1] + 1 });
                                         GameBoard[lastPos[0], lastPos[1]].Uid = "2";
 
@@ -318,6 +364,23 @@ namespace Maze_Generator
                                 case 3:
                                     if (lastPos[0] + 1 < BoardSize)
                                     {
+                                        if (checkBox_moreRandom.IsChecked == true && NumbersOfCells > 1)
+                                            if (GameBoard[lastPos[0] + 1, lastPos[1]].Tag == "1")
+
+                                                //75% de chance de ne pas le faire si autre choix possible
+                                                try{
+                                                    if (GameBoard[lastPos[0] - 1, lastPos[1]].Tag == "0"
+                                                    || GameBoard[lastPos[0], lastPos[1] + 1].Tag == "0"
+                                                    || GameBoard[lastPos[0], lastPos[1] - 1].Tag == "0")
+
+                                                        if (Rdn.Next(100) < 75)
+                                                            goto MORERANDOM;
+                                                }
+                                                catch { }
+
+                                                
+                                            
+
                                         RandomWalkPos.Add(new int[] { lastPos[0] + 1, lastPos[1] });
                                         GameBoard[lastPos[0], lastPos[1]].Uid = "3";
 

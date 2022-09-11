@@ -10,11 +10,11 @@
 
   <ItemGroup>
     <None Remove="background.jpg" />
-    <None Remove="bottom.png" />
     <None Remove="icon.png" />
-    <None Remove="left.png" />
-    <None Remove="right.png" />
-    <None Remove="top.png" />
+    <None Remove="_bottom.png" />
+    <None Remove="_left.png" />
+    <None Remove="_right.png" />
+    <None Remove="_top.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,11 +28,11 @@
 
   <ItemGroup>
     <Resource Include="background.jpg" />
-    <Resource Include="bottom.png" />
     <Resource Include="icon.png" />
-    <Resource Include="left.png" />
-    <Resource Include="right.png" />
-    <Resource Include="top.png" />
+    <Resource Include="_bottom.png" />
+    <Resource Include="_left.png" />
+    <Resource Include="_right.png" />
+    <Resource Include="_top.png" />
   </ItemGroup>
 
 </Project>

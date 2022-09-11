@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -29,7 +30,6 @@ namespace Maze_Generator
         public int BoardSize = 6;
         public int NumbersOfCells = 0;
 
-        BrushConverter HexToBrushesConverter = new BrushConverter();
         Random Rdn = new Random();
 
         private Timer Timer;
@@ -52,7 +52,7 @@ namespace Maze_Generator
                 {
                     for (int y = 0; y < BoardSize; y++)
                     {
-                        double cellSize = wrapPanel_gameBoard.Width / (double)BoardSize - 0.01;
+                        double cellSize = wrapPanel_gameBoard.Width / (double)BoardSize - 0.001;
                         GameBoard[x, y].Width = cellSize;
                         GameBoard[x, y].Height = cellSize;
                     }
@@ -65,14 +65,12 @@ namespace Maze_Generator
             // Taille
             GameBoard = new Border[BoardSize, BoardSize];
 
-            Brush b = (Brush)HexToBrushesConverter.ConvertFromString("#777777");
-
             // Cases ajoutées
             for (int x = 0; x < BoardSize; x++)
             {
                 for (int y = 0; y < BoardSize; y++)
                 {
-                    double cellSize = wrapPanel_gameBoard.ActualHeight / (double)BoardSize - 0.01;
+                    double cellSize = wrapPanel_gameBoard.ActualHeight / (double)BoardSize -0.001;
 
                     // #777777
                     GameBoard[x, y] = new Border()
@@ -81,7 +79,7 @@ namespace Maze_Generator
                         Height = cellSize,
                         BorderThickness = new Thickness(borderThickness),
                         BorderBrush = Brushes.Black,
-                        Background = b,
+                        Background = Brushes.DimGray,
                         Tag = "0"  // 0 = not a cell, 1 = cell
                     };
 
@@ -198,7 +196,6 @@ namespace Maze_Generator
                 if (IsInRandomWalk)
                 {
                     RandomWalkPos.Clear();
-                    wrapPanel_gameBoard.Background = (Brush)HexToBrushesConverter.ConvertFromString("#777777");
 
                     // step 1. Pick a random case who is not a cell
                     int rdnX;
@@ -212,7 +209,6 @@ namespace Maze_Generator
                         }
                         else
                         {
-                            wrapPanel_gameBoard.Background = Brushes.White;
                             stopInstantMode = true;
                             rdnX = -1;
                             rdnY = -1;
@@ -234,7 +230,7 @@ namespace Maze_Generator
                         for (int y = 0; y < BoardSize; y++)
                         {
                             if (GameBoard[x,y].Tag.ToString() == "0")
-                                GameBoard[x, y].Background = Brushes.Transparent;
+                                GameBoard[x, y].Background = Brushes.DimGray;
                         }
                     }
 
@@ -318,7 +314,7 @@ namespace Maze_Generator
 
                     } while (!isPossible);
 
-                    GameBoard[RandomWalkPos.Last()[0], RandomWalkPos.Last()[1]].Background = Brushes.LightCoral;
+                    GameBoard[RandomWalkPos.Last()[0], RandomWalkPos.Last()[1]].Background = Brushes.DarkGray;
 
                     // est-ce que il a attéri sur une cell?
                     if (GameBoard[RandomWalkPos.Last()[0], RandomWalkPos.Last()[1]].Tag == "1")
@@ -500,7 +496,6 @@ namespace Maze_Generator
 
                 if (checkBox_instant.IsChecked == true)
                 {
-                    wrapPanel_gameBoard.Background = Brushes.White;
                     // gen en utilisant le Generator car plus rapide
                     actualMazeIndex = 0;
                     mazes = new List<Cell[,]>();
@@ -526,8 +521,17 @@ namespace Maze_Generator
                 txtBox_boardSize.IsEnabled = true;
                 button_openJ.IsEnabled = true;
 
-                wrapPanel_gameBoard.Children.Clear();
-                DrawGameBoard();
+                for (int x = 0; x < BoardSize; x++)
+                {
+                    for (int y = 0; y < BoardSize; y++)
+                    {
+                        GameBoard[x, y].Background = Brushes.DimGray;
+                        GameBoard[x, y].Tag = "0";
+                        GameBoard[x, y].Uid = "-1";
+                        GameBoard[x, y].BorderThickness = new Thickness(borderThickness);
+
+                    }
+                }
             }
         }
 
@@ -608,32 +612,6 @@ namespace Maze_Generator
             return bmp;
         }
 
-        private void Slider_ValueChanged_1(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            string str = Convert.ToInt32( e.NewValue).ToString();
-            if (str.Length == 1)
-
-                borderThickness = Convert.ToDouble(str.Insert(0, "0,"));
-            else
-                borderThickness = Convert.ToDouble(str.Insert(1, ","));
-
-            if(GameBoard != null)
-            for (int x = 0; x < BoardSize; x++)
-            {
-                for (int y = 0; y < BoardSize; y++)
-                {
-                    if (GameBoard[x, y].BorderThickness.Left > 0)
-                        GameBoard[x, y].BorderThickness = new Thickness(borderThickness, GameBoard[x, y].BorderThickness.Top, GameBoard[x, y].BorderThickness.Right, GameBoard[x, y].BorderThickness.Bottom);
-                    if (GameBoard[x, y].BorderThickness.Top > 0)
-                        GameBoard[x, y].BorderThickness = new Thickness(GameBoard[x, y].BorderThickness.Left, borderThickness, GameBoard[x, y].BorderThickness.Right, GameBoard[x, y].BorderThickness.Bottom);
-                                    if (GameBoard[x, y].BorderThickness.Right > 0)
-                        GameBoard[x, y].BorderThickness = new Thickness(GameBoard[x, y].BorderThickness.Left, GameBoard[x, y].BorderThickness.Top, borderThickness, GameBoard[x, y].BorderThickness.Bottom);
-                                    if (GameBoard[x, y].BorderThickness.Bottom > 0)
-                        GameBoard[x, y].BorderThickness = new Thickness(GameBoard[x, y].BorderThickness.Left, GameBoard[x, y].BorderThickness.Top, GameBoard[x, y].BorderThickness.Right, borderThickness);
-                }
-            }
-        }
-
         private void Button_Click_Gen(object sender, RoutedEventArgs e)
         {
             Window_MassGen window_MassGen = new Window_MassGen();
@@ -687,7 +665,6 @@ namespace Maze_Generator
                     mazes = JsonConvert.DeserializeObject<List<Cell[,]>>(json);
 
                     // ouvre les labys
-                    wrapPanel_gameBoard.Background = Brushes.White;
                     BoardSize = mazes[0].GetLength(0);
                     txtBox_boardSize.Text=  mazes[0].GetLength(0).ToString();
                     wrapPanel_gameBoard.Children.Clear();
@@ -755,6 +732,33 @@ namespace Maze_Generator
 
             button_nextMaze.IsEnabled = true;
 
+        }
+
+        private void Slider_DragCompleted(object sender, DragCompletedEventArgs e)
+        {
+
+            string str = Convert.ToInt32(slider_thickness.Value).ToString();
+            if (str.Length == 1)
+
+                borderThickness = Convert.ToDouble(str.Insert(0, "0,"));
+            else
+                borderThickness = Convert.ToDouble(str.Insert(1, ","));
+
+            if (GameBoard != null)
+                for (int x = 0; x < BoardSize; x++)
+                {
+                    for (int y = 0; y < BoardSize; y++)
+                    {
+                        if (GameBoard[x, y].BorderThickness.Left > 0)
+                            GameBoard[x, y].BorderThickness = new Thickness(borderThickness, GameBoard[x, y].BorderThickness.Top, GameBoard[x, y].BorderThickness.Right, GameBoard[x, y].BorderThickness.Bottom);
+                        if (GameBoard[x, y].BorderThickness.Top > 0)
+                            GameBoard[x, y].BorderThickness = new Thickness(GameBoard[x, y].BorderThickness.Left, borderThickness, GameBoard[x, y].BorderThickness.Right, GameBoard[x, y].BorderThickness.Bottom);
+                        if (GameBoard[x, y].BorderThickness.Right > 0)
+                            GameBoard[x, y].BorderThickness = new Thickness(GameBoard[x, y].BorderThickness.Left, GameBoard[x, y].BorderThickness.Top, borderThickness, GameBoard[x, y].BorderThickness.Bottom);
+                        if (GameBoard[x, y].BorderThickness.Bottom > 0)
+                            GameBoard[x, y].BorderThickness = new Thickness(GameBoard[x, y].BorderThickness.Left, GameBoard[x, y].BorderThickness.Top, GameBoard[x, y].BorderThickness.Right, borderThickness);
+                    }
+                }
         }
     }
 }
